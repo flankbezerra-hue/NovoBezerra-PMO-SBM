@@ -1,0 +1,1198 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PMO.sty (ver. 0.1):  Adjust article class
+% for SBM PMO (Professor de Matematica Online)
+%-----------------------------------------------------
+% Copyright (C) May, 2019
+% by SBM (Sociedade Brasileira de Matematica)
+% autor:
+%    Sadao Massago
+%    e-mail: sadao@ufscar.br
+% supervisor:
+%    Ronaldo Alves Garcia
+%    e-mail: ronaldoalvesgarcia51@gmail.com
+%-----------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% cabecalhos para arquivo de estilo %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Para nao executar fora do ambiente LaTeX 
+%------------------------------------------
+% o arquivo deve ser executado pelo LaTex
+% caso nao tenha, Alguem pode tentar
+% executar no Tex puro, por exemplo.
+\NeedsTeXFormat{LaTeX2e} 
+
+% Nome do arquivo (nao eh obrigatorio ter)
+\ProvidesFile{PMO.sty}
+ [2020/03/19 v 0.1 beta 6 PMO style (require article as document class)]
+\typeout{PMO v 0.1 beta 6 <March/2020>.}
+
+% Para evitar a tentativa de usar no modo de compatibilidade com
+% LaTeX antigo (documentstyle)
+%-----------------------------------------------------------------
+\if@compatibility % modo de compatibilidade com LaTeX antigo?
+  \PackageError{PMO}{Not support older compatible mode (documentstyle)}
+     {Use documentclass instead of documentstyle}
+  \endinput
+\else
+  % OK
+\fi
+
+%% requer article ou amsart como classe de documento
+%%--------------------------------------------------
+%\@ifclassloaded{article}% Usando classe article?
+%  {}% YES (OK)
+%  {\@ifclassloaded{amsart}% Usando classe amsart (artigo do AMS)?
+%    {}% YES (OK)
+%    {\PackageError{PMO}{Require article or amsart as document class}
+%      {use correct document class}
+%      %\endinput
+%    }
+%  }
+
+% Nota: Devido a incompatiblidade do hyperref com amsart,
+% O uso do ambiente tipo teoremas no amsart causa
+% erro quando o pacote hyperref está carregada.
+% Testado em ubuntu 18.04
+
+% requer article como classe de documento
+%----------------------------------------
+\@ifclassloaded{article}% Usando a classe article?
+  {}% YES (OK)
+  {\PackageError{PMO}{Require article as document class}
+      {use correct document class}
+      %\endinput
+  }
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% alguns pacotes usados neste estilo %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Para checar TeX em uso
+
+% \RequirePackage{ifxetex,ifluatex}
+
+%% ifxetex
+%\IfFileExists{ifxetex.sty}{\RequirePackage{ifxetex}}%
+%{
+%  \newif\ifxetex
+%  \xetexfalse
+%}%
+%
+%% ifluatex
+%\IfFileExists{ifluatex.sty}{\RequirePackage{ifluatex}}%
+%{
+%  \newif\ifLuaTeX
+%  \luatexfalse
+%}%
+
+\IfFileExists{iftex.sty}{\RequirePackage{iftex}}%
+{
+  \newif\ifXeTeX
+  \XeTeXfalse
+  \newif\ifLuaTeX
+  \LuaTeXfalse  
+}%
+
+%%% pacotes da base/required
+
+% para depulacao
+%\RequirePackage{layout}
+
+% testa se eh primeira pagina, numero de autores, etc
+\RequirePackage{ifthen}
+
+% ambientes matematicos. deve ser carregado antes de mathspec?
+\RequirePackage{amsmath}
+
+% teoremas. Deve ser carregado antes do newpxmath (se usar)
+% para evitar conflito em \openbox
+\@ifclassloaded{amsart}{}{%
+  \RequirePackage{amsthm}
+}
+
+% para incluir logos
+\RequirePackage{graphicx}
+
+% uso interno para cálculo das medidas
+\RequirePackage{calc}
+
+
+%% pacotes fora de base/required
+
+% Não foi usado
+%\IfFileExists{tikz.sty}{\RequirePackage{tikz}}{\PackageWarning{MU}{tikz.sty not found. Using draft mode.}}
+% Nao foi usado
+%\IfFileExists{xcolor.sty}{\RequirePackage{xcolor}}{\PackageWarning{MU}{xcolor.sty not found. Using draft mode.}}
+
+%% Ele carrega o pacote url tambem.
+%% \url{} sera usado no cabaçalho da revista, e-mail, etc
+%% quebrando linhas.
+\IfFileExists{hyperref.sty}{\RequirePackage{hyperref}}%
+  {\PackageWarning{PMO.sty}{hyperref.sty not found. Using draft mode.}%
+  \providecommand\url[1]{\texttt{##1}}\providecommand\href[2]{\texttt{##2}}}
+  
+% \RequirePackage{url} % para hiperlink (melhor usar hyperref que carrega este)
+
+% para ajustar configuracao do cabecalho
+\IfFileExists{enumitem.sty}{%
+\RequirePackage{enumitem}}%
+{\PackageWarning{PMO.sty}{enumitem.sty not found. Using draft mode.}}
+
+% para ajustar configuracao do cabecalho
+\IfFileExists{fancyhdr.sty}{%
+\RequirePackage{fancyhdr}}%
+{\PackageWarning{PMO.sty}{fancyhdr.sty not found. Using draft mode.}}
+
+% configurar formatacao de titulos (secoes e similares)
+\IfFileExists{titlesec.sty}{%
+\RequirePackage[explicit]{titlesec}}%
+{\PackageWarning{PMO.sty}{titlesec.sty not found. Using draft mode.}}
+
+% Configurando as citacoes
+%\IfFileExists{quoting.sty}{%
+%\RequirePackage[indentfirst=false,leftmargin=0.30\linewidth,rightmargin=0cm]{quoting}}%
+%{\PackageWarning{PMO.sty}{quoting.sty not found. Using draft mode.}}
+  
+% Para ajuste das margens e similares
+\IfFileExists{geometry.sty}{%
+\RequirePackage{geometry}}%
+{\PackageWarning{PMO.sty}{geometry.sty not found. Using draft mode.}}
+
+%Melhorar a formatação das frações no textstyle
+\IfFileExists{nicefrac.sty}{%
+\RequirePackage{nicefrac}}%
+{\PackageWarning{PMO.sty}{nicefrac.sty not found. Using draft mode.}}
+
+%% sansmath para celular
+%% falha no XeLaTeX/LuaLaTeX
+%\IfFileExists{sansmath.sty}{%
+%  \RequirePackage{sansmath}}%
+%  {\PackageWarning{PMO.sty}{sansmath.sty not found. Will not generate mobile version.}}
+
+%math usa mesma fonte do texto
+\IfFileExists{mathastext.sty}{%
+%\RequirePackage[LGRgreek,italic]{mathastext}}%
+ \RequirePackage{mathastext}}%
+{\PackageWarning{PMO.sty}{mathastext.sty not found. Using draft mode.}}
+
+%% para ajustar configuracao do cabecalho
+%\IfFileExists{natbib.sty}{%
+%\RequirePackage{natbib}}%
+%{\PackageWarning{PMO.sty}{natbib.sty not found. If use BibTeX, install natbib package.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% efetuando configuracoes iniciais
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\IfFileExists{hyperref.sty}{% para hiprlink
+  \hypersetup{pdfnewwindow=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+  \urlstyle{rm} % ajustando o estilo de URL
+}{}
+
+% Tablet de 7in tel em torno de 6in de largura maxima
+% Assim, poderá ajustar o papel B5
+% Na versão rascunho, diagramar par aimprimir em B5 (ou duas páginas em A4)
+% Na versão final, cortar as bordas.
+
+% Na versão final, cortar (0.5in-1em) em cada lado 
+% e usar margems de 1em em cada lado
+% (manter área de texto e substituir margens de 0.5 por 1em).
+
+\IfFileExists{geometry.sty}{%
+  \geometry{b5paper, includehead=true, includefoot=true,
+    headheight=18pt, margin=0.5in, headsep=20pt, footskip=20pt}
+}%
+{% Para caso de não encontrar o pacote geometry
+ % (ajute provisório modo rascunho)
+  %%%%%%%%%%%%%%%%%%%%%%
+  % layout das paginas %
+  %%%%%%%%%%%%%%%%%%%%%%
+  % 1in = 2.54cm
+  % 1cm = 28.4pt
+  % 1in = 72.27pt
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % default:
+  % footskip = 30pt = 1.056cm
+  % topmargin = 27pt = 0.95cm
+  %
+  % bmargin = margem+footskip = 1.27mm+30pt = 1.27mm+10.56mm = 11.83mm
+  % tmargin = margem + topmargin? = headheight+headsep
+  %         = 1.27mm+27pt = 1.27mm + 9.5mm = 10.77mm
+  %
+  % paperheight = tmargin + textheight + bmargin
+  %             = tmarginb+headheight+headsep+textheight+footskip+bmargin
+  % 
+  %
+  % US letter = 11inx8.5in (27.9cmx21.6cm)
+  % Não seria melhor usar ISO?
+  % B5 = 9.8inx6.9in (25cmx17.6cm)
+  % Usando B5
+  \setlength\paperheight{9.8in}
+  \setlength\paperwidth{6.9in}
+  % Ajustando outras medidas
+  \setlength{\headsep}{40pt}
+  \setlength{\footskip}{20pt}
+  \setlength{\textheight}{\paperheight-1in-\headheight-\headsep-\footskip} % 
+  \setlength{\textwidth}{\paperwidth-1in}
+  \setlength{\oddsidemargin}{-0.5in}
+  \setlength{\evensidemargin}{-0.5in}
+  \setlength{\topmargin}{-0.5in}
+  % Para PDF
+  \pdfpagewidth\paperwidth
+  \pdfpageheight\paperheight
+}
+
+%\IfFileExists{geometry.sty}{%
+%  \geometry{letterpaper, 
+%    showframe=false,
+%    margin=1.27cm, % 0.5in
+%    lmargin=1.905cm, % 1.5/2 in
+%    rmargin=1.905cm, % 1.5/2 in
+%    includehead=true,
+%    includefoot=true,
+%    includemp=true,
+%    ignoremp=true}
+%}%
+%{%
+%  %%%%%%%%%%%%%%%%%%%%%%
+%  % layout das paginas %
+%  %%%%%%%%%%%%%%%%%%%%%%
+%  % 1in = 2.54cm
+%  % 1cm = 28.4pt
+%  % 1in = 72.27pt
+%  %%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  % default:
+%  % footskip = 30pt = 1.056cm
+%  % topmargin = 27pt = 0.95cm
+%  %
+%  % bmargin = footskip + margem = 30pt + 7mm = 10.56mm+7mm = 17.56mm
+%  % tmargin = margem + topmargin?
+%  %         = 7mm+9.5mm = 16.5mm
+%  %
+%  % paperheight = tmargin + textheight + bmargin
+%  % paperheight = margin + headheight+headsep+textheight+footskip+margem
+%  % 
+%  %
+%  % US letter = 11inx8.5in (27.9cmx21.6cm)
+%  % Não seria melhor usar ISO?
+%  % B5 = 9.8inx6.9in (25cmx17.6cm)
+%  \setlength\paperheight{11in}
+%  \setlength\paperwidth{8.5in}
+%  \newdimen\papertrimheight
+%  \newdimen\papertrimwidth
+%  \setlength\papertrimheight{10in}
+%  \setlength\papertrimwidth{7in}
+%  % Ronaldo: "Peguei dimensoes acima da revista Amer. Math. Monthly. Vale os 10 in?"
+%%
+%%  \setlength{\paperheight}{297mm}
+%%  \setlength{\paperwidth}{210mm}
+%%  \setlength{\textheight}{235mm} % ? Quanto seria?
+%%  \setlength{\textwidth}{207.46mm}
+%%  \setlength{\oddsidemargin}{-11.3mm}
+%%  \setlength{\evensidemargin}{-11.3mm}
+%  %\setlength{\headsep}{10mm} % ?
+%  %\setlength{\footskip}{16mm} % ?
+%  \setlength{\topmargin}{-55pt} % -19.36mm ?
+%  %\setlength{\voffset}{-1.54cm} % da erro no layout?
+%}
+%
+%%%%%%%%%%
+% fontes %
+%%%%%%%%%%
+
+% No XeLaTeX/LuaLaTeX, carregar o fontspec
+% Fonte padrao para fontspec eh Computer Modern
+% As fontes serao ajustadas posteriormente
+% Os pacotes de fontes do LaTeX usa T1 em geral
+% Como fontspec ajusta para unicode, devera
+% retornar para T1 para poder usar os pacotes das fontes.
+%--------------------------------------------------------------
+\ifXeTeX % XeLaTeX
+    % \RequirePackage[no-math]{fontspec}
+    \RequirePackage{fontspec}
+    % mathspec permite definir fontes matematicos com \setmathfont
+    % unicode-math tambem define o comando \setmathfont
+    %\RequirePackage{mathspec} % mathspec carrega fontspec
+    
+    % fontspec redefine como unicode. 
+    % Voltando para T1 para usar pacote de fontes
+    % (dai perde o acesso a unicode fonts que eh EU1)
+    %\RequirePackage[T1]{fontenc}
+\else\ifLuaTeX % LuaLaTeX
+    % \RequirePackage[no-math]{fontspec}
+     \RequirePackage{fontspec}
+    % mathspec permite definir fontes matematicos
+    % unicode-math tambem define o comando \setmathfont{}
+    % Como luatex nao aceita mathspec
+
+    % fontspec redefine como unicode. 
+    % Voltando para T1 para usar pacote de fontes
+    % (dai perde o acesso a unicode fonts que eh EU1)
+    %\RequirePackage[T1]{fontenc}
+\else % (PDF)LaTeX.
+    % fonte de 8-bits.
+    \RequirePackage[T1]{fontenc}
+    % fonte sans para fórmulas matemáticas
+%    \IfFileExists{sansmath.sty}{%
+%    \RequirePackage{sansmath}}%
+%      {\PackageWarning{PMO.sty}{sansmath.sty not found. Will not generate mobile version.}}
+\fi\fi
+
+% Carregando pacotes com simbolos e fontes matematicos
+
+%% if unicode-math.sty not found, install texlive-math-extra
+\ifXeTeX % XeLaTeX
+  %\RequirePackage{xunicode} % textcomp equiv. Obsoleto
+  \RequirePackage{unicode-math} % amsfonts equiv.
+\else\ifLuaTeX % LuaLaTeX
+  %\RequirePackage{xunicode} % xunicode is only for XeLaTeX yet
+  \RequirePackage{unicode-math} % amsfonts equiv
+  \RequirePackage{lualatex-math} % small bug fix
+\else % LaTeX
+  \RequirePackage[full]{textcomp}% mesma opção que newtxtext para evitar conflitos  
+  % \RequirePackage{latexsym} % arleady supplyed by amsfonts.
+  \RequirePackage{amssymb} % amssymb carrega o amsfonts
+\fi\fi
+
+%\RequirePackage{latexsym}
+%\RequirePackage{amssymb} % amssymb carrega o amsfonts
+
+% Fontes para documento: Times like
+% XeLaTeX ou LuaLaTeX
+\ifnum 0\ifXeTeX 1\fi\ifLuaTeX 1\fi>0
+  \IfFontExistsTF{TeX Gyre Termes}%
+  {\setmainfont[Ligatures=TeX]{TeX Gyre Termes}
+   % \setmathfont[math-style=ISO,bold-style=ISO,vargreek-shape=TeX]{texgyrepagella-math.otf}%by filename
+   % vargreek-shape foi removido do fontspec
+   % \setmathfont[math-style=TeX,bold-style=TeX]{texgyretermes-math.otf}
+   \setmathfont[math-style=TeX,bold-style=TeX]{TeX Gyre Termes Math}
+  }{}
+\else  
+  \IfFileExists{newtxmath.sty}%
+   {\RequirePackage{newtxtext,newtxmath}}%
+   {\PackageWarning{PMO.sty}{newtxmath.sty (from newtx) not found. Using mathptmx}%
+   \RequirePackage{mathptmx}
+   }% \IfFileExists{newpxmath.sty}%
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% titulos, autores e similares
+% (usados no cabacalho, titulo e informacoes posteriores)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Inibindo o date{} caso não especificado
+\date{}
+
+% salvando a definicao de \author para caso precisar
+% (neste estilo nao eh necessario)
+\let\author@original\author
+
+% redefinindo \and e definindo \lastand para titulo e postinfo
+\def\and{, }
+\def\lastand{ e }
+\def\postinfoitemsep{\\}
+
+% definindo \shortauthorand e \shortauthorlastand para cabecalho
+\def\shortauthorand{, }
+\def\shortauthorlastand{ e }
+
+% definindo variaveis internas para armazenar informacoes de autores
+% e de shortauthor's para titulo e cabecalho
+\let\@last@author\@empty
+\let\@authors\@empty
+\let\@last@shortauthor\@empty
+\let\@shortauthors\@empty   
+% definindo variaveis internas para armazenar informacoes de autores
+% para postinfo 
+\let\@authors@forpostinfo\@empty
+\let\@last@author@forpostinfo\@empty
+
+%----------------------------------------
+% para preencher espaco em \ifx
+\def\@nothings{\empty}
+
+% Se tiver mais autores que PMOauthormax, será abreviado.
+\newcounter{PMOauthor}
+\setcounter{PMOauthor}{0}
+\newcounter{PMOshortauthormaximum}
+\def\PMOshortauthormax#1{\setcounter{PMOshortauthormaximum}{#1}}
+
+% valor padrao
+\PMOshortauthormax{3}
+
+% use como \author[nome curto]{nome completo}
+\renewcommand{\author}[2][]{%
+  %%%%%%% author list %%%%%%%%
+  \ifx\@empty\@last@author%
+    \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \ifx\@empty\@authors%
+    \expandafter\gdef\expandafter\@authors\expandafter{\@last@author}%
+    \else
+      %\g@addto@macro\@authors{\and#2}%
+\expandafter\g@addto@macro\expandafter\@authors\expandafter{\expandafter\and\@last@author}%  
+    \fi
+    %  \gdef\@last@author{#2}%        
+  \fi
+  \gdef\@last@author{#2}%
+  %%%%%%%%%% author list for post info %%%%%%%%%%%%%
+  \ifx\@empty\@last@author@forpostinfo%
+    \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \ifx\@empty\@authors@forpostinfo%
+    \expandafter\gdef\expandafter\@authors@forpostinfo\expandafter{\@last@author@forpostinfo}%
+    \else
+      %\g@addto@macro\@authors{\and#2}%
+\expandafter\g@addto@macro\expandafter\@authors@forpostinfo\expandafter{\expandafter\and\@last@author@forpostinfo}%  
+    \fi
+    %  \gdef\@last@author{#2}%        
+  \fi
+  \gdef\@last@author@forpostinfo{#2}%
+  %%%%%%% shortauthor list %%%%%%%%%%%%
+  \ifthenelse{\thePMOauthor=\value{PMOshortauthormaximum}}{%
+    \gdef\@last@shortauthor{outros}%  
+  }{%
+  \ifx\@empty\@last@shortauthor%
+    \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \ifx\@empty\@shortauthors%
+    \expandafter\gdef\expandafter\@shortauthors\expandafter{\@last@shortauthor}%
+    \else
+      %\g@addto@macro\@authors{\and#2}%
+\expandafter\g@addto@macro\expandafter\@shortauthors\expandafter{\expandafter\shortauthorand\@last@shortauthor}%  
+    \fi
+    %  \gdef\@last@author{#2}%        
+  \fi
+  \gdef\@last@shortauthor{#1}%  
+  \stepcounter{PMOauthor}%
+  }
+  % shortauthor list
+ }
+
+\providecommand{\orcid}{} % not implemented in amsart and article.
+\renewcommand{\orcid}[1]{%
+  \def\@orcid{\href{https://orcid.org/#1}{\includegraphics[width=2ex]{logo_orcid}}}
+  %%%%%%%%%% author list %%%%%%%%%%%%%
+  \ifx\@empty\@last@author%
+    \typeout{ERROR: orcid need to preceded by author}
+    % \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \def\@temp@arg{#1} % to test if arg is empty (can not test directly)
+    \ifx\@empty\@temp@arg
+      \@nothings
+    \else
+%      \expandafter\g@addto@macro\expandafter\@authors\expandafter{\@orcid}%  
+      %\g@addto@macro\@last@author{\@orcid}%
+      \expandafter\g@addto@macro\expandafter\@last@author\expandafter{\@orcid}%  
+    \fi
+  \fi
+}
+
+\providecommand{\address}{} % imlemented in amsart, but not in article
+\renewcommand{\address}[1]{%
+  %%%%%%%%%% autho list for post info %%%%%%%%%%%%%
+  \ifx\@empty\@last@author@forpostinfo%
+    \typeout{ERROR: address need to preceded by author}
+    % \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \def\@temp@arg{#1} % to test if arg is empty (can not test directly)
+    \ifx\@empty\@temp@arg
+      \@nothings
+    \else
+      \g@addto@macro\@last@author@forpostinfo{\postinfoitemsep#1}%  
+    \fi
+  \fi
+}
+    
+\providecommand{\email}{} % imlemented in amsart, but not in article   
+\renewcommand{\email}[1]{%
+  %%%%%%%%%% autho list for post info %%%%%%%%%%%%%
+  \ifx\@empty\@last@author@forpostinfo%
+    \typeout{ERROR: email need to preceded by author}
+    % \@nothings%\gdef\@last@author{#2}%    
+  \else
+    \def\@temp@arg{#1} % to test if arg is empty (can not test directly)
+    \ifx\@empty\@temp@arg
+      \@nothings
+    \else
+      \g@addto@macro\@last@author@forpostinfo{\postinfoitemsep\textless \url{#1}\textgreater}%  
+    \fi
+  \fi
+}
+
+% AMS tem \urladdr também, mas neste modelo, não será implementado por não usar.
+
+%%%%%%%%%%%%%%%%%%%%%%
+% o estilo de paginas
+%%%%%%%%%%%%%%%%%%%%%%
+
+%% escala de cores
+%
+%\IfFileExists{tikz.sty}{%
+%\newcommand{\MUcolorbar}{\parbox{\textwidth}{%
+%\setlength{\fboxsep}{0pt}
+%\noindent
+%\fbox{\color{black}\rule{5mm}{5mm}}%
+%\fbox{\color{black!90}\rule{5mm}{5mm}}%
+%\fbox{\color{black!80}\rule{5mm}{5mm}}%
+%\fbox{\color{black!70}\rule{5mm}{5mm}}%
+%\fbox{\color{black!60}\rule{5mm}{5mm}}%
+%\fbox{\color{black!50}\rule{5mm}{5mm}}%
+%\fbox{\color{black!40}\rule{5mm}{5mm}}%
+%\fbox{\color{black!30}\rule{5mm}{5mm}}%
+%\fbox{\color{black!20}\rule{5mm}{5mm}}%
+%\fbox{\color{black!10}\rule{5mm}{5mm}}%
+%\fbox{\color{white}\rule{5mm}{5mm}}%
+%\hfill
+%\fbox{\color{yellow}\rule{5mm}{5mm}}%
+%\fbox{\color{magenta}\rule{5mm}{5mm}}%
+%\fbox{\color{cyan}\rule{5mm}{5mm}}%
+%\fbox{\color{blue}\rule{5mm}{5mm}}%
+%\fbox{\color{green}\rule{5mm}{5mm}}%
+%\fbox{\color{red}\rule{5mm}{5mm}}%
+%\fbox{\color{black}\rule{5mm}{5mm}}%
+%\fbox{\color{yellow!50}\rule{5mm}{5mm}}%
+%\fbox{\color{magenta!50}\rule{5mm}{5mm}}%
+%\fbox{\color{cyan!50}\rule{5mm}{5mm}}%
+%\fbox{\color{gray}\rule{5mm}{5mm}}%
+%}}
+%}{%
+%\newcommand{\MUcolorbar}{}
+%}
+
+%%%%%%%%% informaçõs da revista %%%%%%%%%%
+
+\def\PMOyear#1{\gdef\PMO@year{#1}}
+\def\PMOvolume#1{\gdef\PMO@volume{#1}}
+\def\PMOnumber#1{\gdef\PMO@number{#1}}
+\def\PMOreceived#1{\gdef\PMO@received{#1}}
+\def\PMOpublished#1{\gdef\PMO@published{#1}}    
+\def\PMOdoi#1{\gdef\PMO@doi{#1}} 
+% valores padões
+\PMOyear{ano}
+\PMOvolume{volume}
+\PMOnumber{número}
+\PMOreceived{recebido}
+\PMOpublished{}
+\PMOdoi{10.21711/2319023x201971}
+
+% autores usado no titulo.
+% redefinindo para ativar o espaçamento vertical
+% necessáro para quebra de linha manual adequada no titulo
+% Não adianta também
+% Problema é quando armazena no comando
+% \def\title#1{\gdef\PMO@title{#1}}
+
+%\renewcommand{\title}[1]{\gdef\PMO@title{Título: \\ \unexpanded{#1}}}
+%\def\title#1{\gdef\PMO@title{Título: \\ \unexpanded{#1}}}
+
+% montando lista de autores (nomes curtos)
+% para cabeçalho
+\def\PMO@AuthorForHeader{%
+  \def\and{, }
+  \def\lastand{, } 
+    \ifx\@empty\@shortauthors%
+      \@last@shortauthor
+    \else
+	  \@shortauthors\shortauthorlastand\@last@shortauthor
+    \fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% configurando o cabeçalho e rodape
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% uso interno 
+\newcounter{PMO@firstpage}
+
+\newlength{\PMO@temp@length}
+
+\def\PMOfirstpage#1{%
+  \setcounter{PMO@firstpage}{#1}  %onde começa a contar a paginação
+  \setcounter{page}{\value{PMO@firstpage}}
+}
+
+\PMOfirstpage{1}
+
+%
+%\setcounter{firstpage}{1}  %importante: onde começa a contar a paginação
+%\setcounter{page}{\value{firstpage}}
+
+%\pagestyle{fancyplain}
+\pagestyle{fancy}
+
+\fancyhead{}
+\fancyfoot{}
+
+\renewcommand{\headrulewidth}{0pt}
+%\setlength{\headsep}{40pt}
+%\setlength{\headsep}{20pt}
+%\setlength{\footskip}{24pt}
+
+%\newcommand{\setPMOheader}{%
+\fancyhead[L]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%\raisebox{0.07\linewidth}{%
+  \setlength{\PMO@temp@length}{\unitlength}
+  \setlength{\unitlength}{\linewidth}
+  \begin{picture}(0,0)
+    \put(0,-0.07){\includegraphics[height=0.09\linewidth]{logo_PMO}}
+    \put(0,-0.1){\rule{\linewidth}{1.1pt}}
+  \end{picture}
+  \setlength{\unitlength}{\PMO@temp@length}%}
+  }{%
+  %\raisebox{-0.03\linewidth}{%
+  \begin{picture}(0,0)
+    \put(0,0){\includegraphics[width=0.18\linewidth]{logo_PMO}}
+    \end{picture}}}%}
+\fancyhead[R]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%
+    \setlength{\PMO@temp@length}{\unitlength}
+    \setlength{\unitlength}{\linewidth}
+    \begin{picture}(0,0)
+    \put(0,-0.05){\begin{minipage}{0.7\linewidth}
+    \footnotesize{\begin{flushright} 
+       %\makeatletter
+	   PMO v.\PMO@volume, n.\PMO@number, \PMO@year\\
+	   %\makeatother
+	   ISSN: 2319-023X\\
+	   \url{https://doi.org/\PMO@doi}
+	\end{flushright}}
+	\end{minipage}}	
+	\end{picture}\hspace*{0.7\linewidth}{}%
+	\setlength{\unitlength}{\PMO@temp@length}
+	}{\textit{\PMO@AuthorForHeader}}}	
+
+\fancyfoot[L]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%\footnotesize{Publicado online: \PMO@published}
+}{}}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{%
+  \begin{picture}(0,0)
+    \put(0,0){\includegraphics[width=0.12\linewidth]{logo_SBM}}
+  \end{picture}\hspace*{0.12\linewidth}{}}
+
+% } % \newcommand{\setPMOheader}{%
+ 
+\newcommand{\setPMOmobileheader}{%
+
+%\geometry{a6paper,includehead=true,includefoot=true,margin=0.5em}
+
+%\setlength{\headsep}{10pt}
+%\setlength{\footskip}{12pt}
+
+\pagestyle{fancy}
+
+% adjustinf offset, force to realculate layout with new geometry
+\fancyheadoffset{0cm}
+
+\fancyhead{}
+\fancyfoot{}
+
+ \fancyhead[L]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%
+    \setlength{\PMO@temp@length}{\unitlength}
+    \setlength{\unitlength}{\linewidth}
+    %\raisebox{0.1\linewidth}{%
+	 \begin{picture}(0,0)
+    \put(0,-0.07){\includegraphics[height=0.08\linewidth]{logo_PMO}}
+    \put(0,-0.1){\rule{\linewidth}{1.1pt}}
+    \end{picture}
+    \setlength{\unitlength}{\PMO@temp@length}%}
+    }{%
+    \begin{picture}(0,0)
+    \put(0,0){\includegraphics[width=0.1\linewidth]{logo_PMO}}
+    \end{picture}}}
+%\chead{}
+\fancyhead[R]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%
+\setlength{\PMO@temp@length}{\unitlength}
+    \setlength{\unitlength}{\linewidth}
+    \begin{picture}(0,0)
+    \put(0,-0.04){\begin{minipage}{0.8\linewidth}
+    \footnotesize{\begin{flushright} 
+       %\makeatletter
+	   PMO v.\PMO@volume, n.\PMO@number, \PMO@year\\
+	   %\makeatother
+	   ISSN: 2319-023X\\
+	   \url{https://doi.org/\PMO@doi}
+	\end{flushright}}
+	\end{minipage}}	
+	\end{picture}
+	\hspace*{0.8\linewidth}{}%
+	\setlength{\unitlength}{\PMO@temp@length}
+}{\textit{\PMO@AuthorForHeader}}}
+%\rhead{}
+
+%\lfoot{}
+\fancyfoot[L]{\ifthenelse{\thepage=\value{PMO@firstpage}}{%\footnotesize{Publicado online: \PMO@published}
+}{}}
+%\cfoot{}
+\fancyfoot[C]{\hfill\thepage\hfill\begin{picture}(0,0)
+    \put(0,0){\includegraphics[width=0.08\linewidth]{logo_SBM}}
+    \end{picture}\hspace*{0.08\linewidth}{}}
+%\fancyfoot[L]{\thepage}
+%\fancyfoot[R]{
+%  \begin{picture}(0,0)
+%    \put(0,0){\includegraphics[width=0.08\linewidth]{logo_SBM}}
+% \end{picture}\hspace*{0.08\linewidth}~} 
+%\rfoot{}
+} % \newcommand{\setPMOmobileheader}{%
+ 
+
+% apply the fancy style (customized for PMO)
+% \ps@fancy
+
+\let\ps@plain\ps@fancy
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% paragrafo e espacamento entre linhas
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% espacamento entre linhas
+% \linespread{1.30}
+\linespread{1.0}\selectfont % simples
+
+% nos casos insoluveis, pode flutuar de 1.25 a 1.35
+
+
+%% redefinindo o \footnote{} para dar pequeno espaco
+%% extra no comeco
+%\let\@footnoteoriginal\footnote
+%\def\footnote#1{\@footnoteoriginal{\;\;#1}}
+
+% parágrafos
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 1pt minus 0.5pt}
+
+% listas
+\IfFileExists{enumitem.sty}%
+{%
+%% Lista itemizada
+% Para todos niveis (espaco entre rotulo e texto) 
+\setlist[itemize]{labelsep=\widthof{ }}
+% margem: note que rotulo (logo, largura do rotulo) 
+% depende do nivel.
+\setlist[itemize,1]{leftmargin={\widthof{\labelitemi}+\labelsep}} % , itemindent=0pt
+\setlist[itemize,2]{leftmargin={\widthof{\labelitemii}+\labelsep}}
+\setlist[itemize,3]{leftmargin={\widthof{\labelitemiii}+\labelsep}}
+\setlist[itemize,4]{leftmargin={\widthof{\labelitemiv}+\labelsep}}
+%
+%% Lista enumerada
+%\setlist[enumerate]{wide=0pt, widest=99,align=left,labelwidth=\parindent,leftmargin=\parindent, labelsep=*}
+%
+% Todos niveis
+\setlist[enumerate]{labelsep=\widthof{ }}
+% para cada nivel
+\setlist[enumerate,1]{leftmargin={\widthof{\labelenumi}+\labelsep}}
+\setlist[enumerate,2]{leftmargin={\widthof{\labelenumii}+\labelsep}}
+\setlist[enumerate,3]{leftmargin={\widthof{\labelenumiii}+\labelsep}}
+\setlist[enumerate,4]{leftmargin={\widthof{\labelenumiv}+\labelsep}}
+}{}
+
+% lista de descricao
+% Todos niveis
+\setlist[description]{leftmargin=1em}
+
+%% citacoes
+
+%% quotation (original do amsart)
+%\renewenvironment{quotation}{\list{}{%
+%    \leftmargin3pc \listparindent\normalparindent
+%    \itemindent\z@
+%    \rightmargin\leftmargin \parsep\z@ \@plus\p@}%
+%  \item[]%
+%}{%
+%  \endlist
+%}
+%\let\endquotation=\endlist % for efficiency
+
+% copiando o original
+\let\beginquotationoriginal\beginquotation
+\let\endquotationoriginal\endquotation
+% redefinindo
+\renewenvironment{quotation}{\list{}{%
+    \leftmargin0.075\textwidth
+    \rightmargin0.075\textwidth%\z@
+    \listparindent\z@
+    \itemindent\z@
+    \parsep\z@ \@plus\p@}%
+  \item[]%
+}{%
+  \endlist
+}
+\let\endquotation=\endlist % for efficiency
+
+%% quote (original do amsart)
+%\newenvironment{quote}{%
+%  \list{}{\rightmargin\leftmargin}\item[]%
+%}{%
+%  \endlist
+%}
+%\let\endquote=\endlist % for efficiency
+%
+% copiando o original
+\let\beginquoteoriginal\beginquote
+\let\endquoteoriginal\endquote
+% redefinindo
+\renewenvironment{quote}{%
+  \list{}{\labelwidth\z@\leftmargin=0.075\linewidth,%
+    \rightmargin=0.075\linewidth%0cm
+  }\item[]%
+}{%
+  \endlist
+}
+\let\endquote=\endlist % for efficiency
+%
+% Definindo o proprio do PMO
+% itshape nao funciona como \beginitshape
+% usar \begingroup
+\newenvironment{PMOquote}[1]{\def\PMOquote@arg{#1}%
+  \list{}{\labelwidth=\z@
+    \leftmargin=0.075\linewidth
+    \rightmargin=0.075\linewidth%\z@
+    }\item[]\begingroup\itshape%
+}{%
+  \endgroup\PMOquote@arg\endlist%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% formato de titulos da secao/subsecao
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\titleformat{\section}[hang]
+%{\bfseries}
+%{\thesection. }
+%{0pt}
+%{}
+
+%% para caso explicito
+%\titleformat{\section}[hang]
+%  {\normalfont\bfseries}{\MakeUppercase{#1}}{.5em}{\vspace{.5ex}}
+  
+% para caso explicito
+\titleformat{\section}[hang]
+  {\normalfont\bfseries}{\thesection. #1}{.5em}{\vspace{.5ex}}
+\titleformat{name=\section,numberless}[hang]
+  {\normalfont\bfseries}{#1}{.5em}{\vspace{.5ex}}
+    
+%\titleformat{\section}[hang,numberless]
+%  {\normalfont\bfseries}{\MakeUppercase{#1}}{.5em}{\vspace{.%5ex}}
+
+% Para caso explicito    
+%\titleformat{name=\section,numberless}[hang]
+%  {\normalfont\bfseries}{\MakeUppercase{#1}}{.5em}{\vspace{.5ex}}
+    
+    
+%\titleformat{\section}[hang]
+%{\bfseries\scshape}
+%{\thesection. }
+%{0pt}
+%{}
+
+%\titleformat{\section}[block]
+%{\normalfont\bfseries\filcenter}{\fbox{\itshape\thesection}}{1em}{}
+
+\titlespacing{\section}
+{0pt}{*2}{\wordsep}
+
+%\renewcommand{\thesection}{}
+%\titleformat{\section}[hang]
+%{\vspace*{-3.0ex}}%
+%{}
+%{0pt}
+%{\vspace*{-2.0ex}\bfseries}
+
+% caso explicito
+\titleformat{\subsection}
+  {\normalfont\bfseries}{\thesubsection. #1}{0em}{}
+
+%\renewcommand{\thesubsection}{}
+%\titleformat{\subsection}[hang]
+%{\vspace*{-3.0ex}}
+%{}
+%{0pt}
+%{\vspace*{-2.0ex}\bfseries}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% titulos e informacoes posteriores %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% redefinindo o \maketitle
+%-------------------------
+\newlength{\PMO@titleparskip}
+
+% \setlength{\parskip}{6pt plus 1pt minus 0.5pt}
+
+% \def\PMO@titlebeforeskip{7.0ex}
+\def\PMO@titlebeforeskip{4.0ex}
+
+%\let\linebreakoriginal\linebreak
+%\let\croriginal\cr
+%% \baselineskip=2\baselineskip
+%%\linebreak (e \cr) não é mesmo que \\
+%% como redefinir \\?
+
+\def\maketitle{%
+  \def\and{\hspace{1.0cm}}
+  \def\lastand{\hspace{1.0cm}} 
+  \let\thanks\footnote
+  % \def\linebreak{\linebreakoriginal\vspace*{2cm}===}
+  % \def\cr{\linebreakoriginal ===}
+
+%  \PMO@titleparskip = \parskip
+%  \setlength{\parskip}{0pt}
+  \vspace*{\PMO@titlebeforeskip}
+  \begin{center}
+  %\raggedbottom
+  %\begin{minipage}{\linewidth}
+  %  \centering
+    % \linespread{1.9}\selectfont % single half spacing
+    %\begin{LARGE}
+    %\doublespacing
+    %\begin{spacing}{2}
+	%\textbf{\LARGE \@title}
+	%{\linespread{1} \@currsize \LARGE\bfseries \@title}
+	%{\linespread{1} \@currsize \LARGE\bfseries \PMO@title}
+	% {\bfseries \LARGE \PMO@title}
+	% colocar entre chaves causa problema de espacamento
+	% entre linhas quando usa linebreak manual
+	\bfseries \LARGE \@title
+	%\\ \LARGE teste de \\\
+	%linha 1 2 3 linha 4 5 6 linha 7 8 9 linha 10 11 12
+	%\end{spacing}
+	%\end{LARGE}
+  %\end{minipage}
+  \end{center}
+  %
+  \begin{center}
+    \ifx\@empty\@authors%
+      \@last@author \\
+    \else
+	  \@authors\lastand\@last@author \\
+    \fi
+  \end{center}
+  \vspace*{1.0ex}
+  % \parskip = \PMO@titleparskip
+  %\let\linebreak\linebreakoriginal
+  %\let\cr\croriginal
+  \let\thanks\relax
+}
+
+% post information
+\def\@nothingsone#1{\empty}
+
+\def\PMO@postinfo{%
+  \def\and{\par}
+  \def\lastand{\par} 
+  \let\thanks\@nothingsone
+  \vspace*{\PMO@titlebeforeskip}
+  \begin{flushright}
+    \ifx\@empty\@authors@forpostinfo%
+      \@last@author@forpostinfo
+    \else
+	  \@authors@forpostinfo\lastand\@last@author@forpostinfo
+    \fi
+    \par
+    \vspace*{6.0ex}
+    Recebido: \PMO@received \\
+    Publicado: \PMO@published 
+  \end{flushright}
+%  \ifx\@empty\PMO@acknowledgment%
+%    \@nothingsone{} 
+%  \else
+%    \section*{Agradecimentos}
+%    \PMO@acknowledgment
+%  \fi
+}
+
+% \AtBeginDocument{\vspace*{0.07\linewidth}}
+
+% Colocar no final do documento
+\AtEndDocument{\PMO@postinfo}
+
+
+% acrescentar campos para recebimentos, etc.
+ 
+%\let\titleoriginal\title
+%\def\title#1{\titleoriginal{\scshape #1}} 
+
+%\addto\maketitle{\let\thefootnote\relax\footnote{Recebido: aa/bb/2019  / Revisado: xx  /  tt  /2019   /  Aceito:  ss/ss/2019 /  Publicado online: 12/09/2019.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Outros ambientes/comandos e ajustes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewenvironment{abstract}[1][Resumo]%
+{\vspace*{5.5ex}
+\centerline{\textbf{#1}}}{\par}
+
+\providecommand{\keywords}[2][Palavras-chave]{\textbf{#1:} #2\par\vspace*{1.0ex}\par}
+
+%\def\acknowledgment#1{\gdef\PMO@acknowledgment{#1}} 
+
+%\let\quoteOld\quote
+%\let\endquoteOld\endquote
+%\renewenvironment{quote}{\quotefont\small\quoteOld}{\endquoteOld}
+%
+%\let\quotationOld\quotation
+%\let\endquotationOld\endquotation
+%\renewenvironment{quotation}{\quotefont\small\quotationOld}{\endquotationOld}
+
+%\renewenvironment{quote}
+%  {\small\list{}{\rightmargin=2.5cm \leftmargin=2.5cm}%
+%   \item\relax}
+%  {\endlist}
+
+
+% Alterando titulo para referências
+\addto{\captionsbrazil}{\renewcommand{\refname}{Referências}}
+\addto{\captionsbrazilian}{\renewcommand{\refname}{Referências}}
+
+% enumeracao da equacao subordinado a secao
+% \numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ambiente de teoremas e similares
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Cada categoria serao contadas separadamente
+
+%\theoremstyle{plain} % padrao
+\newtheorem{theorem}{Teorema}
+\newtheorem{corollary}{Corol\'ario}
+\newtheorem{lemma}{Lema}
+\newtheorem{axiom}{Axioma}
+\newtheorem{property}{Propriedade}
+\newtheorem{proposition}{Proposi\c{c}\~ao}
+\theoremstyle{definition}
+\newtheorem{definition}{Defini\c{c}\~ao}
+\newtheorem{example}{Exemplo}
+\newtheorem{problem}{Problema}
+\newtheorem{exercise}{Exerc\'icio}
+% usar mesmo estilo de definicao na observacao?
+\theoremstyle{remark}
+\newtheorem{remark}{Observa\c{c}\~ao}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% estilo da referencia biliografica
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Formatação
+% Leftmargin não funciona aqui.
+% Para usar, provavelmente precisa redefinir
+\let\thebibliographyoriginal=\thebibliography
+%\let\endthebibliographyoriginal=\endthebibliography
+\def\thebibliography#1{%
+\thebibliographyoriginal{#1}
+\setlength{\parskip}{0ex}
+%\setlength{\itemsep}{0ex}
+%\setlength{\itemindent}{-0.5em}
+}
+
+%% estilo (para BibTeX)
+%\IfFileExists{plainnat.bst}{%
+%\bibliographystyle{plainnat}}%
+%{\bibliographystyle{amsplain}\PackageWarning{PMO.sty}{plainnat.bst not found. Using draft mode.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Finalizando o arquivo de estilo %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% declarando opcoes
+
+\DeclareOption{final}{
+  % checar os pacotes necessarios
+  \IfFileExists{geometry.sty}{}%
+  {\PackageError{PMO}{geometry.sty (geometry package) not found.}
+  {Install geometry package.}}
+
+  \IfFileExists{nicefrac.sty}{}%
+  {\PackageError{PMO}{nicefrac.sty not found.}
+  {Install nicefrac package.}}
+
+  \IfFileExists{hyperref.sty}{}%
+  {\PackageError{PMO}{hyperref.sty (hyperref package) not found.}
+  {Install hyperref package.}}
+
+  \IfFileExists{enumitem.sty}{}%
+  {\PackageError{PMO}{enumitem.sty (enumitem package) not found.}
+  {Install enumitem package.}}
+
+  \IfFileExists{fancyhdr.sty}{}%
+  {\PackageError{PMO}{fancyhdr.sty not found.}
+  {Install fancyhdr package.}}
+
+  \IfFileExists{mathastext.sty}{}%
+  {\PackageError{PMO}{mathastext.sty not found.}
+  {Install mathastext package.}}
+
+%  \IfFileExists{plainnat.bst}{}%
+%  {\PackageError{PMO}{plainnat.bst not found.}
+%  {Install natbib package.}}
+
+  % Usando papel B5 recortado
+  % recortando margens para 1em em cada lado, recortando o papel 
+  % para manter área do texto
+%  \geometry{b5paper, includehead=true, includefoot=true,
+%    headheight=18pt, margin=0.5in, headsep=20pt, footskip=20pt}
+  \geometry{includehead=true, includefoot=true, paperwidth={6.9in-1in+2em}, paperheight={9.8in-1in+2em}, headheight=18pt, margin=1em, headsep=20pt, footskip=20pt}
+ 
+ % disable mathastext on normal version
+ \MTversion{normal}
+} % \DeclareOption{final}{
+  
+\DeclareOption{celular}{
+  \ExecuteOptions{final}
+  
+%  \IfFileExists{sansmath.sty}{}%
+%  {\PackageError{PMO}{sansmath.sty not found.}
+%  {Install sansmath package.}}
+  
+  % Usar appel A6 
+  % margens de 0.5em em cada lado
+  \geometry{a6paper, includehead=true, includefoot=true, margin=0.5em, headheight=12pt, headsep=10pt, footskip=12pt}
+
+  \PassOptionsToPackage{symbolgreek}{mathastext}
+  % \PassOptionsToPackage{greek}{mathastext}
+
+  \renewcommand{\familydefault}{\sfdefault} % padrão é \sffamily
+    
+  \Mathastext
+  
+  % sansmath falha no XeLaTeX/LuaLaTeX
+  % \sansmath
+  
+
+
+%  \ifPDFTeX
+%    % Da erro no LuaLaTeX/XeLaTeX com a fonte TeX Gyre Termes Math
+%    \sansmath % Equação como sans.
+%  \fi
+  
+  \setPMOmobileheader
+
+%  \ifnum 0\ifXeTeX 1\fi\ifLuaTeX 1\fi>0
+%    \IfFileExists{mathastext.sty}{}%
+%    {\PackageError{PMO}{mathastext.sty not found.}
+%    {Install mathastext package.}}
+%    % \usepackage[italic]{mathastext}
+%  \else
+%    \IfFileExists{sansmath.sty}{}%
+%    {\PackageError{PMO}{sansmath.sty not found.}
+%    {Install sansmath package.}}
+%
+%    \sansmath % math as sans
+%    % to disable, use \unsansmath
+%  \fi
+    
+} % \DeclareOption{celular}{  
+  
+% Executar algumas opcoes por padrao
+
+% \ExecuteOptions { options-list }
+
+% Caso tenha a declaracao das opcoes,
+% eh necessario colocar \ProcessOptions
+% no final do arquivo.
+%-------------------------------------------------
+
+\ProcessOptions
+% fim: PMO.sty

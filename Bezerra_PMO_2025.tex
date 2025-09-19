@@ -1,0 +1,927 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professor de Matemática Online
+%--------------------------------
+% Versão 2020, v. 0.1 beta 6
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Requer article como classe de documento
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+% \usepackage[latin1]{inputenc}
+
+\usepackage[brazil]{babel}
+
+% \usepackage{PMO} % rascunho para impressão em B5 (com margens)
+\usepackage[final]{PMO} % para PC e tablet em B5 recortado
+%\usepackage[celular]{PMO} % para celular em A6
+
+% Para DEBUG
+% \usepackage{layout}
+
+%\usepackage{amsbsy, amsmath,amsfonts,amssymb,amsthm,amscd,amssymb,latexsym,float}
+
+%\usepackage{enumerate}
+
+%\usepackage{setspace} % precisa?
+%\singlespacing
+
+\usepackage{float} % para controle de posicionamento
+
+% \usepackage{comment} % Para comentar um bloco de uma vez
+
+%\usepackage{array} % Para criar diagramas
+
+% para colorir
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{animate}
+\usepackage{multido}
+\usepackage{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Uso do editor (não editar estes campos)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Informacoes sobre revista
+\PMOdoi{ 10.21711/2319023x2020/pmo8xx} % doi
+\PMOyear{2020} % Ano
+\PMOvolume{8} % volume
+\PMOnumber{y} % numero
+
+% Informacoes sobre artigo
+\PMOreceived{20/04/2020} % data de recebimento
+%\PMOpublished{13/04/2020} % data de publicacao
+
+% Onde começa a contar a paginação.
+\PMOfirstpage{1}
+
+% Se tiver mais autores que PMOshortauthormax, será abreviado
+% quando for colocar no cabeçalho.
+% Não há efeito para títulos e informações dos autores
+% no final do documento.
+\PMOshortauthormax{3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Incluir pacotes adicionais para seu artigo aqui
+% (quantidade minima possivel).
+% Não redefinir comandos existentes (não usar \def, \let ou \renewcommand)
+%
+% Caso todos os artigos forem compilados juntos no mesmo arquivo, também seria recomendável não permitir criar comandos para evitar conflitos.
+% Caso for compilados separadamente, não há problemas em criar comandos novos.
+% Nota: Mesmo no \DeclareMathOperator, não pode ter mesma declaração duas vezes.
+
+% Definição dos comandos para nomes das funções e similares podem ser feitas.
+\DeclareMathOperator{\sen}{sen} % do amsmath
+\newcommand{\senh}{\mathmr{senh}} % LaTeX sem amsmath
+
+% Ambientes do tipo teoremas pré definidas:
+% axiom (axioma), theorem (teorema), proposition (porposição),
+% lemma (lema), corolary (corolário), property (propriedade),
+% definition (definição), example (exemplo), 
+% problem (problema), exercise (exercício), 
+% remark (observação).
+%
+% Caso precise, poderá definir mais outros, 
+% seguindo o modelo abaixo
+% (cada categoria terá enumeração independente e sem vínculo
+% com as seções;subseções)
+\theoremstyle{plain} % estilo de teoremas e similares
+\newtheorem{postulate}{Postulado}
+\theoremstyle{definition} % estilo de definições e similares
+\newtheorem{question}{Questão}
+\theoremstyle{remark} % estilo de observações e similares
+\newtheorem{note}{Nota}
+% Para a demonstração, usar o ambiente proof 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Informações do documento
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% titulo
+\title{Práticas no \LaTeX\  relacionadas com noções básicas\\
+ da trigonometria}
+% primeiro autor
+\author[Bezerra]{Flank D. M. Bezerra\thanks{Parcialmente apoiado pelo CNPq/Finance Code \# 303039/2021-3}}
+  \orcid{0000-0002-8937-4193} 
+\address{Departamento de Matem\'atica, Universidade Federal da Para\'iba, 58051-900, Jo\~ao Pessoa - PB, Brasil}
+\email{flank@mat.ufpb.br}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Corpo principal do documento
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% \layout{}
+
+\maketitle
+
+\begin{abstract}
+Neste trabalho produzimos algumas animações relacionadas a conceitos básicos da trigonometria usando os pacotes gráficos \LaTeX\, ‘animate', ‘multido' e ‘tikz'. Compartilhamos todos os códigos necessários para a edição e reprodução das animações.
+\end{abstract}
+
+\keywords{animações; animate; latex; tikz; trigonometria.}
+
+\begin{abstract}[Abstract]
+In this work, we produced some animations related to basic trigonometry concepts using the graphic packages \LaTeX\, ‘animate', ‘multido', and ‘tikz'. We share all the code necessary for editing and playing the animations.
+\end{abstract}
+
+\keywords[Keywords]{animations; animate; latex; tikz; trigonometry}
+ 
+ \section{Introdu\c c\~ao}
+ 
+ 
+
+Neste trabalho exploramos o pensamento computacional na educação matemática elementar, experimentando e compartilhando os conjuntos de códigos \LaTeX\ necessários para produção, edição, exibição de animações relacionadas a conceitos básicos presentes em qualquer aula de introdução à trigonometria. 
+
+A ‘trigonometria' e o ‘pensamento computacional' são tópicos presentes na Base Nacional Comum Curricular (BNCC), veja \cite{BNCC}. Enquanto, a trigonometria na BNCC é abordada como habilidade a ser adquirida pelos estudantes no último ano do Ensino Fundamental, e Ensino Médio, veja  \cite[Habilidade EF09MA13 e Habilidade EM13MAT306]{BNCC}. O pensamento computacional na BNCC é tratado com uma competência essencial para a formação integral dos estudantes, preparando-os para os desafios do mundo digital, veja \cite[EI03CO01]{BNCC}.
+
+
+Embora o \TeX\ não tenha sido originalmente projetado para trabalhos gráficos, hoje temos muitos argumentos que podem gerar ilustrações de alta qualidade. Essas ilustrações geradas podem ser integradas aos nossos documentos em um estilo consistente com o texto ao redor. Aqui, usamos o \LaTeX\ e alguns dos seus pacotes gráficos vetoriais, como o ‘animate', ‘tikz' e o ‘multido' para estimular o exercícios da iteração entre trigonometria e o pensamento computacional. Entendemos que a nossa proposta pode estimular à capacidade de compreender, analisar, modelar, resolver e automatizar problemas de forma metódica e sistemática, utilizando conceitos e métodos elementares da Ciência da Computação. 
+
+Para reprodução das animações aqui apresentadas, recomendamos que o leitor use o leitor de texto PDF ‘Adobe Acrobat Reader’ em um computador. Em \cite{Bezerra} e \cite{Costa} há exemplos de outros leitores de texto PDF capazes de reproduzir as animações construidas com o pacote \LaTeX\ ‘animate'.
+
+O presente artigo está estruturado da seguinte forma. Na Seção \ref{SecRadiano} exploramos o apelo intuitivo geométrico associado com a   definição da medida angular radiano. Na Seção \ref{SecPi} exploramos o o ‘animate', ‘tikz' e o ‘multido'  para ilustrar o que seria $\pi$. Na Seção \ref{SecDoisPi} exploramos o o ‘animate', ‘tikz' e o ‘multido'  para ilustrar o que seria $2\pi$.  Na Seção \ref{SecFunCosSenTan} exploramos  o apelo intuitivo geométrico por trás da definição das funções cosseno, seno e tangente. Na Seção \ref{SecInvoluta} ilustramos a involuta de uma circunferência. Finalmente, na Seção \ref{SecCicloide} apresentamos animações relacionadas à cicloide. 
+
+\section{Um radiano}\label{SecRadiano}
+
+\begin{definition}
+Um radiano (rad) é definido como o ângulo central de um círculo onde o comprimento do arco é igual ao raio do círculo. Em outras palavras, um radiano é o ângulo que subtende um arco com comprimento igual ao raio no centro do círculo. 
+\end{definition}
+
+
+Veja a animação da Figura \ref{Fig1Rad}.
+
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{5}
+\multiframe{8}{ra=0+0.25}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)circle(0.02);
+\draw[blue,very thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)circle(0.02);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue,very thick]
+({2*cos(\r)},{2*sin(\r)})arc(\r:{\r+10}:2);
+}
+\end{tikzpicture}}
+\newframe
+\multiframe{19}{rb=0+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)circle(0.02);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[blue,very thick,rotate around={-\rb:(2,0)}](0,0)--(2,0)node[midway, below]{$r$};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{5}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)circle(0.02);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\rc=0+0.25}{\i}{
+\draw[blue,very thick] plot[smooth]
+  coordinates{(2,0)  ({2-2*\rc+2*\rc*cos(45/pi)},{0.5-0.5*\rc+2*\rc*sin(45/pi)})  ({2-2*\rc+2*\rc*cos(90/pi)},{1-\rc+2*\rc*sin(90/pi)}) ({2-2*\rc+2*\rc*cos(135/pi)},{1.5-1.5*\rc+2*\rc*sin(135/pi)}) ({2-2*\rc+2*\rc*cos(180/pi)},{2-2*\rc+2*\rc*sin(180/pi)})};
+}
+\end{tikzpicture}
+}
+\newframe 
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)circle(0.02);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\end{tikzpicture}
+\end{animateinline}
+\caption{$\mbox{1 rad}\approx 57,29577951^\circ$}
+\label{Fig1Rad}
+\end{figure}
+
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura \ref{Fig1Rad}.
+
+\href{.................}{....................}
+
+
+
+
+\section{Constante $\pi$}\label{SecPi}
+
+
+O número $\pi$ é uma constante matemática que é definida como sendo a razão entre o comprimento de uma circunferência e o seu dinâmetro. Veja a animação da Figura \ref{FigPi}.
+
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{5}
+\multiframe{8}{ra=0+0.25}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue, thick]
+({2*cos(\r)},{2*sin(\r)})arc(\r:{\r+10}:2);
+}
+\end{tikzpicture}}
+\newframe 
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\draw[teal,ultra thick]({2*cos(540/pi)},{2*sin(540/pi)}) arc (0:-25.2/pi:2)node[midway, left]{\small{$\approx$ 0,14 rad}};
+\end{tikzpicture}
+\end{animateinline}
+\caption{$\pi\approx\mbox{3,14 rad}$}
+\label{FigPi}
+\end{figure}
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura  \ref{FigPi}.
+
+\href{.................}{....................}
+
+
+
+\section{Constante $2\pi$}\label{SecDoisPi}
+
+
+O número $2\pi$ é uma constante matemática que é definida como sendo o comprimento de uma circunferência de raio igual a 1. Veja a animação da Figura \ref{FigDoisPi}.
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{5}
+\multiframe{8}{ra=0+0.25}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue, thick]
+({2*cos(\r)},{2*sin(\r)})arc(\r:{\r+10}:2);
+}
+\end{tikzpicture}}
+\newframe 
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={540/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={540/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={720/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={540/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={720/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={900/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\end{tikzpicture}
+\newframe
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3.75,-3.75) rectangle (3.75,3.75);
+\draw[->,gray] (-2.5,0) -- (2.5,0) node[right]{$x$};
+\draw[->,gray] (0,-2.5) -- (0,2.5) node[above]{$y$};
+\draw[blue, thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue, thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\begin{scope}[rotate around={180/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={360/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={540/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={720/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\begin{scope}[rotate around={900/pi:(0,0)}]
+\draw[red,very thick](2,0)arc(0:180/pi:2);
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw[dotted](0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\filldraw[red]({2*cos(180/pi)},{2*sin(180/pi)})circle(0.04);
+\end{scope}
+\draw[teal,very thick](2,0) arc (0:-50.4/pi:2)node[midway, right]{\small{$\approx$ 0,28 rad}};
+\end{tikzpicture}
+\end{animateinline}
+\caption{$2\pi\approx\mbox{6,28 rad}$}
+\label{FigDoisPi}
+\end{figure}
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura \ref{FigDoisPi}.
+
+
+
+\href{.................}{....................}
+
+
+
+
+
+
+
+
+
+
+
+\section{Funções  cosseno, seno e a cicloide}\label{SecFunCosSenTan}
+
+A animação na Figura \ref{FigSenCos} destaca o círculo trigonométrica e o comportamento das funções cosseno, seno e tangente, veja \cite{ASN}.
+
+
+
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{3}
+\multiframe{19}{r=0+4.9}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[->] (-1.5,0) -- (1.5,0) node[right]{$x$};
+\draw[->] (0,-1.5) -- (0,1.5) node[above]{$y$};
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw({cos(\r)},{sin(\r)})--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)node[below]{{\small $cos(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})node[left]{{\small $sen(\theta)$}};
+\draw({cos(\r)},0.05)--({cos(\r)-0.05},0.05)--({cos(\r)-0.05},0);
+\draw(0,{sin(\r)-0.05})--(0.05,{sin(\r)-0.05})--(0.05,{sin(\r)});
+\draw[magenta](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)node[right]{{\small$\theta$}};
+\end{tikzpicture}}
+\newframe
+\multiframe{19}{r=90.5+4}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw(0,0)--({cos(\r)},{sin(\r)});
+\draw(0,0)--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)node[below]{{\small $cos(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})node[right]{{\small $sen(\theta)$}};
+\draw({cos(\r)},0.05)--({cos(\r)-0.05},0.05)--({cos(\r)-0.05},0);
+\draw(0,{sin(\r)-0.05})--(-0.05,{sin(\r)-0.05})--(-0.05,{sin(\r)});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{19}{r=180.4+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)node[above]{{\small $cos(\theta)$}};
+\draw(0,0)--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})node[right]{{\small $sen(\theta)$}};
+\draw({cos(\r)},-0.05)--({cos(\r)-0.05},-0.05)--({cos(\r)-0.05},0);
+\draw(-0.05,{sin(\r)})--(-0.05,{sin(\r)-0.05})--(0,{sin(\r)-0.05});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{23}{r=270.5+4}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)node[above]{{\small $cos(\theta)$}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw({cos(\r)},{sin(\r)})--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})node[left]{{\small $sen(\theta)$}};
+\draw({cos(\r)},-0.05)--({cos(\r)-0.05},-0.05)--({cos(\r)-0.05},0);
+\draw(0.05,{sin(\r)})--(0.05,{sin(\r)+0.05})--(0,{sin(\r)+0.05});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\end{animateinline}
+\caption{Funções cosseno, seno e tangente}
+\label{FigSenCos}
+\end{figure}
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura \ref{FigSenCos}.
+
+
+
+\href{.................}{....................}
+
+
+
+\section{A involuta de uma circunferência}\label{SecInvoluta}
+
+\begin{definition}
+A involuta de uma circunferência é uma curva plana obtida pela trajetória de um ponto na extremidade de um fio imaginário, enquanto esse fio é desenrolado, mantido sempre esticado, de uma circunferência fixa. Em outras palavras, é a curva que se forma quando um fio, preso a um ponto na circunferência, é desenrolado como se fosse uma linha de costura em um carretel.     
+\end{definition}
+
+
+\begin{theorem}
+A parametrização da involuta de uma circunferência de raio r centrada no ponto $(0,0)$ do plano $xy$, traçada pelo ponto $P=(r,0)$ no final do fio é dada pelas seguintes equações
+\[
+x(\theta)=r(\cos(\theta)+\theta\sin(\theta)),\quad y(\theta)=r(\sin(\theta)-\theta\cos(\theta)),\quad \theta\in[0,2\pi].
+\]
+\end{theorem}
+
+Veja \cite{ASN} para mais detalhes.
+
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{10}
+\multiframe{5}{ra=0+0.2}{
+\begin{tikzpicture}
+\path[use as bounding box] (-5,-5) rectangle (5,5);
+\draw[blue,thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}
+\path[use as bounding box] (-5,-5) rectangle (5,5);
+\draw[blue,thick](0,0)--(1,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue,thick]
+({cos(\r)},{sin(\r)})arc(\r:{\r+10}:1);
+}
+\end{tikzpicture}}
+\newframe
+ \multiframe{100}{i=1+1}{
+\begin{tikzpicture}
+ \path[use as bounding box] (-5,-5) rectangle (5,5);
+ \draw[blue,thick](0,0)--(1,0)node[midway, below]{$r$};
+ \draw[blue,thick](0,0)circle(1);
+ \draw[blue,thick](0,0)--(1,0);
+\multido{\r=0+3}{\i}{
+\draw[very thick, smooth, domain=\r:\r+10] plot ({cos(\r)+\r*pi/180*sin(\r)},{sin(\r)-\r*pi/180*cos(\r)})circle(0.02);}
+\end{tikzpicture}}
+\end{animateinline}
+\caption{Involuta de uma circuferência}
+\label{FigInv}
+\end{figure}
+
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura \ref{FigInv}.
+
+
+
+
+\href{.................}{....................}
+
+
+
+
+
+
+\section{Cicloide}\label{SecCicloide}
+
+Problemas associados a circunferências que rolam sem deslizar são podem ser encontrados em exames de larga escala, aqueles aplicados a um grande número de estudantes. Veja a animação da Figura \ref{Animacao1}.
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{25}
+\multiframe{227}{i=0+10}
+{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-1.5,-1) rectangle (8,2.5);
+\draw[dotted,gray] (-1.3,0) -- (7.5,0) node[right]{$\texttt{r}$};     
+\draw(\i/360,1)circle(1);
+\filldraw[blue] ({\i/360-sin(\i/360 r)},{1-cos(\i/360 r)})circle(0.03) node[below]{{\tiny P}};
+\draw({\i/360},1)--({\i/360-sin(\i/360 r)},{1-cos(\i/360 r)});
+\filldraw({\i/360},1)circle(0.03);
+\end{tikzpicture}}
+\end{animateinline}
+\caption{Um ponto sobre uma circunferência que rola sem deslizar}
+\label{Animacao1}
+\end{figure}
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura  \ref{Animacao1}.
+
+
+
+
+\href{.................}{....................}
+
+
+
+
+\begin{definition}
+A cicloide é a curva traçada por um ponto fixo de uma circunferência que rola sem deslizar sobre uma reta. 
+\end{definition}
+
+\begin{theorem}
+As equações paramétricas de uma cicloide, curva descrita por um ponto fixo em um circunferência de raio $r>0$ rolando sobre uma reta, eixo $x$, no plano $xy$, são
+\[
+x(\theta)=r(\theta-\sen(\theta)),\quad y(\theta)=r(1-\cos(\theta)),\quad \theta\in\mathbb{R}.
+\]
+\end{theorem}
+Veja \cite{ASN} para mais detalhes.
+
+\begin{figure}[!htp]
+\centering
+\begin{animateinline}[poster = last, controls]{25}
+\multiframe{227}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-1.5,-1) rectangle (8,2.5);
+\draw[dotted,gray] (-1.3,0) -- (7.5,0) node[right]{$x$};  
+\draw[gray](10*\i/360,1)circle(1);
+\draw({10*\i/360},1)--({10*\i/360-sin(10*\i/360 r)},{1-cos(10*\i/360 r)});
+\filldraw({10*\i/360},1)circle(0.03);
+\multido{\rt=0+10}{\i}{
+\filldraw[blue] ({\rt/360-sin(\rt/360 r)},{1-cos(\rt/360 r)})circle(0.02);}
+\end{tikzpicture}}
+\end{animateinline}
+\caption{Um arco de cicloide}
+\label{FigArcCicloide}
+\end{figure}
+
+Compartilhamos agora os códigos em  \LaTeX\ necessários para gerar a animação da Figura \ref{FigArcCicloide}.
+
+
+
+\href{.................}{....................}
+
+
+
+% agradecimentos
+\section*{Agradecimentos}
+
+Gostaríamos de agradecer ao professor doutor Angelo Aliano Filho da UTFPR pela ajuda com o \LaTeX. Também agradecemos ao referee anônimo pela sugestão do uso de plataformas online para hospedar, gerenciar e compartilhar projetos de código-fonte.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Referências Bibliográficas
+%------------------------------------------
+
+% Manter parâmetro do ambiente thebibliography para calcular
+% largura do rótulo do item (usualmente "99") como vazio.
+
+\begin{thebibliography}{}	
+\bibitem{Bezerra}
+F. D. M. Bezerra, \textit{Compartilhando práticas com os pacotes gráficos LaTeX ‘Animate’ e ‘TikZ’
+na educação matemática elementar}. PMO {\bf 12} (2), 2024.  https://doi.org/10.21711/2319023x2024/pmo1218
+
+
+\bibitem{BNCC}
+Brasil, M. d. E. 
+\textit{Base Nacional Comum Curricular}.
+2025.
+Disponível em: \url{https://basenacionalcomum.mec.gov.br/}.
+Acesso em: 04 de maio de 2025.
+
+\bibitem{Costa} 
+C. F. Costa, \textit{O uso do \LaTeX\ na construção e animações de figuras geométricas como auxílio no ensino de geometria}, Dissertação do PROFMAT/UFCA, 2022. Disponível \href{https://sca.profmat-sbm.org.br/profmat_tcc.php?id1=6814&id2=171053976}{aqui}.
+
+\bibitem{ASN} H. Alencar, W. Santos, e G. S. Neto, Geometria Diferencial das Curvas no R2, 1a edição, SBM, Rio de Janeiro, 2020.
+\end{thebibliography}
+
+ \end{document}

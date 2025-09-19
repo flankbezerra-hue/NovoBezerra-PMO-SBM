@@ -1,0 +1,29 @@
+\begin{animateinline}[poster = last, controls]{10}
+\multiframe{5}{ra=0+0.2}{
+\begin{tikzpicture}
+\path[use as bounding box] (-5,-5) rectangle (5,5);
+\draw[blue,thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}
+\path[use as bounding box] (-5,-5) rectangle (5,5);
+\draw[blue,thick](0,0)--(1,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue,thick]
+({cos(\r)},{sin(\r)})arc(\r:{\r+10}:1);
+}
+\end{tikzpicture}}
+\newframe
+ \multiframe{100}{i=1+1}{
+\begin{tikzpicture}
+ \path[use as bounding box] (-5,-5) rectangle (5,5);
+ \draw[blue,thick](0,0)--(1,0)node[midway, below]{$r$};
+ \draw[blue,thick](0,0)circle(1);
+ \draw[blue,thick](0,0)--(1,0);
+\multido{\r=0+3}{\i}{
+\draw[very thick, smooth, domain=\r:\r+10] plot ({cos(\r)+\r*pi/180*sin(\r)},
+{sin(\r)-\r*pi/180*cos(\r)})circle(0.02);}
+\end{tikzpicture}}
+\end{animateinline}

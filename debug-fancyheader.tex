@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[utf8]{inputenc}
+
+%\usepackage[brazil]{babel}
+ 
+\usepackage{lipsum}
+ 
+%para DEBUG
+%\usepackage{layout} % \layout{} imprime layout atual
+% \usepackage{showframe} % mostrar margens
+
+\usepackage{geometry}
+\geometry{showframe, b5paper, includehead=true, includefoot=true,
+    margin=0.5in, headsep=40pt, footskip=20pt} %, headheight=75pt}
+    
+
+\usepackage{fancyhdr}
+
+\usepackage{ifthen}
+
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancy}
+
+\fancyhead{}
+\fancyfoot{}
+
+
+% se tamanho da imagem for igual, OK
+% Colocar o includegraphics no ambiente picture estabiliza,
+% mas pode precisar do ajuste manual de altura do cabeçalho.
+\fancyhead[L]{\ifthenelse{\thepage=1}{
+\begin{picture}(0,0)
+\put(0,0){\includegraphics[height=0.09\linewidth]{logo_PMO}}
+\end{picture}
+}{\begin{picture}(0,0)
+\put(0,0){\includegraphics[height=0.03\linewidth]{logo_PMO}}
+\end{picture}}}
+
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+	
+%\layout{}
+
+\lipsum
+\lipsum
+\lipsum
+
+%\layout{}
+
+\end{document}
+

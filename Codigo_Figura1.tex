@@ -1,0 +1,54 @@
+\begin{animateinline}[poster = last, controls]{5}
+\multiframe{8}{ra=0+0.25}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)--({\ra},0);
+\end{tikzpicture}
+}
+\newframe
+\multiframe{37}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\r=0+10}{\i}{
+\draw[blue,very thick]
+({2*cos(\r)},{2*sin(\r)})arc(\r:{\r+10}:2);
+}
+\end{tikzpicture}}
+\newframe
+\multiframe{19}{rb=0+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[blue,very thick,rotate around={-\rb:(2,0)}](0,0)--(2,0)
+node[midway, below]{$r$};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{5}{i=1+1}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\multido{\rc=0+0.25}{\i}{
+\draw[blue,very thick] plot[smooth]
+  coordinates{(2,0) ({2-2*\rc+2*\rc*cos(45/pi)},{0.5-0.5*\rc+2*\rc*sin(45/pi)})
+  ({2-2*\rc+2*\rc*cos(90/pi)},{1-\rc+2*\rc*sin(90/pi)}) 
+  ({2-2*\rc+2*\rc*cos(135/pi)},{1.5-1.5*\rc+2*\rc*sin(135/pi)})
+  ({2-2*\rc+2*\rc*cos(180/pi)},{2-2*\rc+2*\rc*sin(180/pi)})};
+}
+\end{tikzpicture}
+}
+\newframe 
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-3,-3) rectangle (3,3);
+\draw[blue,very thick](0,0)--(2,0)node[midway, below]{$r$};
+\draw[blue,very thick](2,0)arc(0:360:2);
+\draw[red,very thick](2,0)arc(0:180/pi:2)node[midway, right]{\small{1 rad}};
+\draw({2*cos(180/pi)},{2*sin(180/pi)})circle(0.02);
+\draw(0,0)--({2*cos(180/pi)},{2*sin(180/pi)});
+\draw[fill=pink] (0,0) -- (0.5,0) arc (0:180/pi:0.5);
+\end{tikzpicture}
+\end{animateinline}

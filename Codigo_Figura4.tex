@@ -1,0 +1,92 @@
+\begin{animateinline}[poster = last, controls]{3}
+\multiframe{19}{r=0+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[->] (-1.5,0) -- (1.5,0) node[right]{$x$};
+\draw[->] (0,-1.5) -- (0,1.5) node[above]{$y$};
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw({cos(\r)},{sin(\r)})--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)
+node[below]{{\small $cos(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})
+node[left]{{\small $sen(\theta)$}};
+\draw({cos(\r)},0.05)--({cos(\r)-0.05},0.05)--({cos(\r)-0.05},0);
+\draw(0,{sin(\r)-0.05})--(0.05,{sin(\r)-0.05})--(0.05,{sin(\r)});
+\draw[magenta](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)
+node[right]{{\small$\theta$}};
+\end{tikzpicture}}
+\newframe
+\multiframe{19}{r=90+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw(0,0)--({cos(\r)},{sin(\r)});
+\draw(0,0)--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)node[below]
+{{\small $cos(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})node[right]
+{{\small $sen(\theta)$}};
+\draw({cos(\r)},0.05)--({cos(\r)-0.05},0.05)--({cos(\r)-0.05},0);
+\draw(0,{sin(\r)-0.05})--(-0.05,{sin(\r)-0.05})--(-0.05,{sin(\r)});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)
+node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{19}{r=180+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)
+node[above]{{\small $cos(\theta)$}};
+\draw(0,0)--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})
+node[right]{{\small $sen(\theta)$}};
+\draw({cos(\r)},-0.05)--({cos(\r)-0.05},-0.05)--({cos(\r)-0.05},0);
+\draw(-0.05,{sin(\r)})--(-0.05,{sin(\r)-0.05})--(0,{sin(\r)-0.05});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)
+node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\newframe
+\multiframe{19}{r=270+5}{
+\begin{tikzpicture}[scale=1.5]
+\path[use as bounding box] (-2.8,-2.8) rectangle (2.8,2.8);
+\draw[blue,->] (1,-2) -- (1,2) node[above]{{\small tangente}};
+\draw[->] (-1.2,0) -- (1.2,0) node[right]{$x$};
+\draw[->] (0,-1.2) -- (0,1.2) node[above]{$y$};
+\filldraw({cos(\r)},{sin(\r)})circle(0.02);
+\draw[dotted]({cos(\r)},{sin(\r)})--({cos(\r)},0)
+node[above]{{\small $cos(\theta)$}};
+\draw(0,0) -- ({cos(\r)},{sin(\r)});
+\draw({cos(\r)},{sin(\r)})--(1,{tan(\r)})node[right]{{\small $tg(\theta)$}};
+\draw[dotted]({cos(\r)},{sin(\r)})--(0,{sin(\r)})
+node[left]{{\small $sen(\theta)$}};
+\draw({cos(\r)},-0.05)--({cos(\r)-0.05},-0.05)--({cos(\r)-0.05},0);
+\draw(0.05,{sin(\r)})--(0.05,{sin(\r)+0.05})--(0,{sin(\r)+0.05});
+\draw[gray](1,0)arc(0:360:1);
+\draw (1.1,0.1)node{\tiny 1};
+\draw (-0.1,1.1)node{\tiny 1};
+\draw[->,fill=pink,opacity=0.5](0,0)--(0.3,0)arc(0:\r:0.3)
+node[right]{{\small$\theta$}};
+\end{tikzpicture}
+}
+\end{animateinline}

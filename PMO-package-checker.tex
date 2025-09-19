@@ -1,0 +1,166 @@
+\documentclass{article}
+
+\usepackage{iftex}
+
+%%% pacotes da base/required
+
+% para depulacao
+%\usepackage{layout}
+
+% testa se eh primeira pagina, numero de autores, etc
+\usepackage{ifthen}
+
+% ambientes matematicos. deve ser carregado antes de mathspec?
+\usepackage{amsmath}
+
+\usepackage{amsthm}
+
+\usepackage{graphicx}
+
+% uso interno para cálculo das medidas
+\usepackage{calc}
+
+
+%% pacotes fora de base/required
+
+% Não foi usado
+%\IfFileExists{tikz.sty}{\RequirePackage{tikz}}{\PackageWarning{MU}{tikz.sty not found. Using draft mode.}}
+% Nao foi usado
+%\IfFileExists{xcolor.sty}{\RequirePackage{xcolor}}{\PackageWarning{MU}{xcolor.sty not found. Using draft mode.}}
+
+%% Ele carrega o pacote url tambem.
+%% \url{} sera usado no cabaçalho da revista, e-mail, etc
+%% quebrando linhas.
+\usepackage{hyperref}
+  
+% para ajustar configuracao do cabecalho
+\usepackage{enumitem}
+
+% para ajustar configuracao do cabecalho
+\usepackage{fancyhdr}
+
+% configurar formatacao de titulos (secoes e similares)
+\usepackage[explicit]{titlesec}
+
+% Configurando as citacoes
+%\usepackage[indentfirst=false,leftmargin=0.30\linewidth,rightmargin=0cm]{quoting}
+  
+% Para ajuste das margens e similares
+\usepackage{geometry}
+
+%Melhorar a formatação das frações no textstyle
+\usepackage{nicefrac}
+
+% snasmath para celular
+\usepackage{sansmath}
+
+%math usa mesma fonte do texto
+\usepackage[LGRgreek,italic]{mathastext}
+
+%% para ajustar configuracao do cabecalho
+%\usepackage{natbib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% efetuando configuracoes iniciais
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% para hiprlink
+\hypersetup{pdfnewwindow=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\urlstyle{rm} % ajustando o estilo de URL
+
+
+% Tablet de 7in tel em torno de 6in de largura maxima
+% Assim, poderá ajustar o papel B5
+% Na versão rascunho, diagramar par aimprimir em B5 (ou duas páginas em A4)
+% Na versão final, cortar as bordas.
+
+% Na versão final, cortar (0.5in-1em) em cada lado 
+% e usar margems de 1em em cada lado
+% (manter área de texto e substituir margens de 0.5 por 1em).
+
+\geometry{b5paper, includehead=true, includefoot=true,
+  margin=0.5in, %1.27cm, % 0.5in
+}
+
+
+%%%%%%%%%%
+% fontes %
+%%%%%%%%%%
+
+% No XeLaTeX/LuaLaTeX, carregar o fontspec
+% Fonte padrao para fontspec eh Computer Modern
+% As fontes serao ajustadas posteriormente
+% Os pacotes de fontes do LaTeX usa T1 em geral
+% Como fontspec ajusta para unicode, devera
+% retornar para T1 para poder usar os pacotes das fontes.
+%--------------------------------------------------------------
+\ifXeTeX % XeLaTeX
+    % \RequirePackage[no-math]{fontspec}
+    \usepackage{fontspec}
+    % mathspec permite definir fontes matematicos com \setmathfont
+    % unicode-math tambem define o comando \setmathfont
+    %\usepackage{mathspec} % mathspec carrega fontspec
+    
+    % fontspec redefine como unicode. 
+    % Voltando para T1 para usar pacote de fontes
+    % (dai perde o acesso a unicode fonts que eh EU1)
+    %\usepackage[T1]{fontenc}
+\else\ifLuaTeX % LuaLaTeX
+    % \RequirePackage[no-math]{fontspec}
+     \usepackage{fontspec}
+    % mathspec permite definir fontes matematicos
+    % unicode-math tambem define o comando \setmathfont{}
+    % Como luatex nao aceita mathspec
+
+    % fontspec redefine como unicode. 
+    % Voltando para T1 para usar pacote de fontes
+    % (dai perde o acesso a unicode fonts que eh EU1)
+    %\usepackage[T1]{fontenc}
+\else % (PDF)LaTeX.
+    % fonte de 8-bits.
+    \usepackage[T1]{fontenc}
+    % fonte sans para fórmulas matemáticas
+%    \IfFileExists{sansmath.sty}{%
+%    \usepackage{sansmath}}%
+%      {\PackageWarning{PMO.sty}{sansmath.sty not found. Will not generate mobile version.}}
+\fi\fi
+
+% Carregando pacotes com simbolos e fontes matematicos
+
+%% if unicode-math.sty not found, install texlive-math-extra
+\ifXeTeX % XeLaTeX
+  %\usepackage{xunicode} % textcomp equiv. Obsoleto
+  \usepackage{unicode-math} % amsfonts equiv.
+\else\ifLuaTeX % LuaLaTeX
+  %\usepackage{xunicode} % xunicode is only for XeLaTeX yet
+  \usepackage{unicode-math} % amsfonts equiv
+  \usepackage{lualatex-math} % small bug fix
+\else % LaTeX
+  \usepackage[full]{textcomp}% mesma opção que newtxtext para evitar conflitos  
+  % \usepackage{latexsym} % arleady supplyed by amsfonts.
+  \usepackage{amssymb} % amssymb carrega o amsfonts
+\fi\fi
+
+%\usepackage{latexsym}
+%\usepackage{amssymb} % amssymb carrega o amsfonts
+
+% Fontes para documento: Times like
+% XeLaTeX ou LuaLaTeX
+\ifnum 0\ifXeTeX 1\fi\ifLuaTeX 1\fi>0
+  \IfFontExistsTF{TeX Gyre Termes}%
+  {\setmainfont[Ligatures=TeX]{TeX Gyre Termes}
+   % \setmathfont[math-style=ISO,bold-style=ISO,vargreek-shape=TeX]{texgyrepagella-math.otf}%by filename
+   % vargreek-shape foi removido do fontspec
+   % \setmathfont[math-style=TeX,bold-style=TeX]{texgyretermes-math.otf}
+   \setmathfont[math-style=TeX,bold-style=TeX]{TeX Gyre Termes Math}
+  }{}
+\else  
+  \usepackage{newtxtext,newtxmath}
+  % \usepackage{mathptmx}
+\fi
+
+\begin{document}
+Arquivo de teste dos pacotes.
+No MikTeX, os pacotes lm-math, tex-gyre e tex-gyre-math podem precisar ser instalado manualmente.
+\end{document}
+
